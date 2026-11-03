@@ -15,7 +15,7 @@ def grade_from_text(text: object) -> int:
     answer = text.strip().lower() if isinstance(text, str) else ""
     if answer in GRADE_WORDS:
         return GRADE_WORDS[answer]
-    if answer.isdecimal() and GRADE_MIN <= int(answer) <= GRADE_MAX:
+    if answer in ("0", "1", "2", "3", "4", "5"):
         return int(answer)
     raise MnemoError(
         f"'{text}' is not a grade.",

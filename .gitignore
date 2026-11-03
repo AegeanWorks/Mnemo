@@ -18,3 +18,5 @@ mnemo.json.stale_*
 .mnemo.json.tmp_*
 # AIKit transient state
 node_modules/
+# AIKit transient state
+.aikit/*.log

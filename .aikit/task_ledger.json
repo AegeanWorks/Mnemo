@@ -1,60 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "mnemo-sm2-v1",
+    "task_id": "mnemo-audit-v1",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1792621277.5870814,
-    "completed_at": 1792621304.751828
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793722762.0294907,
+    "owner": "kilo:audit",
+    "started_by": "kilo:audit",
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "mnemo-sm2-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/6] Scaffold: Card model, crash-safe JSON deck store, add/list commands and CLI with failing-first unit tests, README, pyproject, LICENSE, ADR-001",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792609267.7700837,
-      "timestamp_str": "2026-10-21 22:01:07",
-      "impact_assessment": {
-        "why": "The kit has no spaced-repetition project: learning is a daily developer activity and every existing SRS tool either syncs to a cloud or drags in dependencies, so a local-first, stdlib-only SM-2 flashcard CLI fills the gap",
-        "benefits": "deterministic SM-2 scheduling as pure functions is fully unit-testable; one readable JSON deck file with atomic writes, backup and locking keeps the study state crash-safe; add/list/study/stats give a complete daily loop with zero setup and a sub-10-second demo",
-        "risks": "contract: deck schema {version, cards, reviews} is fixed at version 1 so later fields need migration; dependency: none beyond the standard library; concurrency: two mnemo processes mutate one deck file; state: a corrupt deck file must never lose cards",
-        "mitigation": "schema version checked on read and unknown versions refused in place; the store mirrors tally's proven atomic path (temp + fsync + os.replace, .bak, 3s/30s advisory lock, quarantine); scheduling is pure and clock-injected so tests pin dates exactly"
-      }
-    },
-    {
-      "task_id": "mnemo-sm2-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[1/6] Scaffold complete: Card/Review models, crash-safe DeckState store, deck add/find/list, add/list CLI; 39 tests green (failing-first: 4 import errors before implementation); aikit fix+check: test, hygiene, guidelines, secrets 4/4; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792612952.35287,
-      "timestamp_str": "2026-10-21 23:02:32"
-    },
-    {
-      "task_id": "mnemo-sm2-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[2/6] SM-2 scheduler complete: published formula with ease floor, lapse reset, grade words, injected dates; due_cards and list --due with maturity column; 55 tests green (failing-first: 3 errors 1 failure before implementation); fix+check: test, hygiene, guidelines, secrets 4/4; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792613895.7127702,
-      "timestamp_str": "2026-10-21 23:18:15"
-    },
-    {
-      "task_id": "mnemo-sm2-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[3/6] Study session complete: injected-I/O engine with reveal/grade/re-prompt loop, q and EOF quit, atomic per-answer commits, bounded --limit, deck.record_review; 68 tests green (failing-first: 6 errors before implementation); fix+check: test, hygiene, guidelines, secrets 4/4; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792614567.5597448,
-      "timestamp_str": "2026-10-21 23:29:27"
-    },
     {
       "task_id": "mnemo-sm2-v1",
       "phase": "phase 4",
@@ -225,6 +181,57 @@
       "timestamp": 1793290531.5875306,
       "timestamp_str": "2026-10-29 19:15:31",
       "agent": "opencode"
+    },
+    {
+      "task_id": "mnemo-audit-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Audit waves 0,10,20,30: survey 34 commits, verify contracts, analyze residuals, minimal failing-first fix",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793722655.2598083,
+      "timestamp_str": "2026-11-03 19:17:35",
+      "agent": "kilo:audit",
+      "impact_assessment": {
+        "why": "Audit mnemo waves in order; residual input-validation strictness (unicode grades, bool ids, string ease) risks contract drift from documented 0-5 ASCII and integer-id rules",
+        "benefits": "Evidence-backed wave verdicts with reproduce/quote/measure; one minimal failing-first tightening keeps SM-2 and CLI contracts pinned without scope creep",
+        "risks": "contract: grade/id parsing stricter could reject previously accepted inputs; dependency: stdlib only; concurrency: lock path untouched; state: deck schema unchanged, no migration",
+        "mitigation": "Failing-first tests pin ASCII-only grades and existing ASCII behavior; full unittest suite plus aikit check gates; explicit staging and no push"
+      },
+      "plan_digest": "efd58ccd195c7b5ede623ccc609b17ff3cd1911f0704286f14dcf13472a8eaa3"
+    },
+    {
+      "task_id": "mnemo-audit-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/4] Waves 0 and 10 verified: SM-2 core and licensing/brand; prior ease/deck bugs confirmed fixed in later commits; README 6775 chars with prereq/test/tree; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793722761.1820617,
+      "timestamp_str": "2026-11-03 19:19:21",
+      "agent": "kilo:audit"
+    },
+    {
+      "task_id": "mnemo-audit-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/4] Waves 20 and 30 verified: id/lock/text-invariant fixes correct; residual unicode-grade acceptance reproduced (grade 4 for U+0664); failing-first test added then ASCII-only fix; 108 tests green; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793722761.603664,
+      "timestamp_str": "2026-11-03 19:19:21",
+      "agent": "kilo:audit"
+    },
+    {
+      "task_id": "mnemo-audit-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/4] Full gates green: python -m unittest discover 108 OK, aikit check mnemo 4/4, README gate pass; map refreshed via fix; ready to commit no push; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793722762.0294907,
+      "timestamp_str": "2026-11-03 19:19:22",
+      "agent": "kilo:audit"
     }
   ]
 }

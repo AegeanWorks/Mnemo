@@ -9,8 +9,8 @@
 - **Total Python Modules**: `18`
 - **Total Classes**: `21`
 - **Total Top-Level Functions**: `32`
-- **Total Class Methods**: `153`
-- **Total Source Lines**: `2131`
+- **Total Class Methods**: `154`
+- **Total Source Lines**: `2137`
 
 ---
 
@@ -111,7 +111,7 @@
 ### [`mnemo/scheduler.py`](mnemo/scheduler.py)
 > *The SM-2 scheduling functions: pure, date-injected, exactly the published algorithm.*
 
-**Size**: `68` lines (`2709` bytes)
+**Size**: `68` lines (`2689` bytes)
 
 **Functions:**
 - `def grade_from_text(text)` - *A grade from one digit 0-5, or from the words again, hard, good and easy.*
@@ -282,13 +282,14 @@
 ### [`tests/test_scheduler.py`](tests/test_scheduler.py)
 > *Tests of the SM-2 scheduling functions, pinned to exact dates and values.*
 
-**Size**: `108` lines (`4737` bytes)
+**Size**: `114` lines (`4985` bytes)
 
 **Classes:**
 - `class GradeParsingTests`
   - Method `.test_grade_from_text_accepts_digits()`
   - Method `.test_grade_from_text_accepts_words_case_insensitively()`
   - Method `.test_grade_from_text_rejects_other_answers()`
+  - Method `.test_grade_from_text_rejects_unicode_digits()`
 - `class NextStateTests`
   - Method `.test_first_successful_review()`
   - Method `.test_second_successful_review_uses_six_days()`

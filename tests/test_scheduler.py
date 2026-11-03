@@ -31,6 +31,12 @@ class GradeParsingTests(unittest.TestCase):
                 grade_from_text(bad)
             self.assertIn("Fix:", raised.exception.render())
 
+    def test_grade_from_text_rejects_unicode_digits(self):
+        for bad in ("٤", "०", "４", "+4", " ４"):
+            with self.subTest(bad=bad):
+                with self.assertRaises(MnemoError):
+                    grade_from_text(bad)
+
 
 class NextStateTests(unittest.TestCase):
     def test_first_successful_review(self):
