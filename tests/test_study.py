@@ -6,6 +6,7 @@ import unittest
 from pathlib import Path
 
 from mnemo.deck import Deck
+from mnemo.errors import MnemoError
 from mnemo.storage import StateStore
 from mnemo.study import run_session
 
@@ -91,6 +92,16 @@ class SessionTests(unittest.TestCase):
         report = run_session(self.deck, "2026-10-21", 2, self.script("", "4", "", "4"), output)
         self.assertEqual(report.reviewed, 2)
         self.assertIn("still due today", output.text())
+
+    def test_non_positive_limit_is_refused_before_any_review(self):
+        self.deck.add_card("front", "back", "default", "2026-10-21")
+        for bad in (0, -3):
+            with self.subTest(limit=bad):
+                with self.assertRaises(MnemoError) as raised:
+                    run_session(self.deck, "2026-10-21", bad, self.script("", "4"),
+                                CaptureOutput())
+                self.assertIn("Fix:", raised.exception.render())
+        self.assertEqual(self.deck.store.read().reviews, [])
 
     def test_one_remaining_card_is_singular(self):
         self.deck.add_card("front 1", "back", "default", "2026-10-21")

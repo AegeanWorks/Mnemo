@@ -26,7 +26,7 @@ class GradeParsingTests(unittest.TestCase):
         self.assertEqual(grade_from_text("easy"), 5)
 
     def test_grade_from_text_rejects_other_answers(self):
-        for bad in ("6", "-1", "later", "", "  ", "²"):
+        for bad in ("6", "-1", "later", "", "  ", "²", "04"):
             with self.assertRaises(MnemoError) as raised:
                 grade_from_text(bad)
             self.assertIn("Fix:", raised.exception.render())
@@ -88,6 +88,12 @@ class NextStateTests(unittest.TestCase):
         for quality in (-1, 6):
             with self.assertRaises(MnemoError):
                 next_state(make_card(), quality=quality, today="2026-10-21")
+
+    def test_huge_interval_reports_the_triad_instead_of_overflowing(self):
+        card = make_card(repetitions=5, interval_days=10 ** 12, ease=2.5)
+        with self.assertRaises(MnemoError) as raised:
+            next_state(card, quality=4, today="2026-10-21")
+        self.assertIn("Fix:", raised.exception.render())
 
     def test_identity_fields_survive_and_input_is_untouched(self):
         card = make_card(repetitions=2, interval_days=6)

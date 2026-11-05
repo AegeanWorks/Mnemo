@@ -120,6 +120,16 @@ class DeckTests(unittest.TestCase):
         self.assertEqual([card.front for card in self.deck.entries(deck_name="alpha")], ["alpha"])
         self.assertEqual(len(self.deck.entries()), 2)
 
+    def test_entries_normalize_the_deck_filter(self):
+        self.deck.add_card("kana", "back", "japanese", "2026-10-21")
+        self.assertEqual([card.front for card in self.deck.entries(deck_name="Japanese")],
+                         ["kana"])
+        self.assertEqual([card.front for card in self.deck.due_cards("2026-10-21",
+                                                                     deck_name=" JAPANESE ")],
+                         ["kana"])
+        with self.assertRaises(MnemoError):
+            self.deck.entries(deck_name="   ")
+
     def test_due_cards_filter_by_deck(self):
         self.deck.add_card("alpha", "back", "alpha", "2026-10-21")
         self.deck.add_card("beta", "back", "beta", "2026-10-21")

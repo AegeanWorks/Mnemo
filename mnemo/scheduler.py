@@ -49,7 +49,15 @@ def next_state(card: Card, quality: int, today: str) -> Card:
         interval_days = (1 if repetitions == 1 else 6 if repetitions == 2
                          else round(card.interval_days * ease))
         lapses = card.lapses
-    due = (date.fromisoformat(today) + timedelta(days=interval_days)).isoformat()
+    try:
+        due = (date.fromisoformat(today) + timedelta(days=interval_days)).isoformat()
+    except OverflowError as exc:
+        raise MnemoError(
+            f"card {card.id} overflows the calendar.",
+            "due dates must stay inside the supported calendar range.",
+            "restore the deck's .bak, or edit the file so interval_days is a smaller "
+            "non-negative integer.",
+        ) from exc
     return replace(card, ease=ease, repetitions=repetitions, interval_days=interval_days,
                    lapses=lapses, due=due)
 

@@ -38,11 +38,13 @@ class ParseTests(unittest.TestCase):
 
     def test_parse_card_id_accepts_positive_integers(self):
         self.assertEqual(parse_card_id("7"), 7)
+        self.assertEqual(parse_card_id(7), 7)
 
     def test_parse_card_id_rejects_non_positive_or_garbled(self):
-        for bad in ("0", "-3", "two", ""):
-            with self.assertRaises(MnemoError):
-                parse_card_id(bad)
+        for bad in ("0", "-3", "two", "", "4.5", True, False, 4.5, None):
+            with self.subTest(bad=bad):
+                with self.assertRaises(MnemoError):
+                    parse_card_id(bad)
 
     def test_parse_iso_date_round_trips_valid_dates(self):
         self.assertEqual(parse_iso_date("2026-10-21"), "2026-10-21")
@@ -82,6 +84,7 @@ class CardTests(unittest.TestCase):
         bad_records = [
             {**base, "ease": 1.0},
             {**base, "ease": "high"},
+            {**base, "ease": "2.5"},
             {**base, "ease": None},
             {**base, "ease": float("nan")},
             {**base, "ease": float("inf")},

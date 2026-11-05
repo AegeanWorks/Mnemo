@@ -21,6 +21,7 @@ def select_deck(cards: List[Card], deck_name: Optional[str]) -> List[Card]:
     """Only the cards of one deck, or every card when no deck is named."""
     if deck_name is None:
         return list(cards)
+    deck_name = normalize_deck(deck_name)
     return [card for card in cards if card.deck == deck_name]
 
 

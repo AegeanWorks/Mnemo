@@ -53,9 +53,16 @@ def normalize_deck(value: Optional[str]) -> str:
 
 def parse_card_id(value: str) -> int:
     """A positive integer card id, as shown by `list`."""
-    try:
-        card_id = int(value)
-    except (TypeError, ValueError):
+    if isinstance(value, bool):
+        card_id = 0
+    elif isinstance(value, int):
+        card_id = value
+    elif isinstance(value, str):
+        try:
+            card_id = int(value)
+        except (TypeError, ValueError):
+            card_id = 0
+    else:
         card_id = 0
     if card_id < 1:
         raise MnemoError(
@@ -179,8 +186,15 @@ class Card:
                 "each card is one JSON object with its text and scheduling fields.",
                 "restore the deck's .bak, or remove the broken entry from the file.",
             )
+        ease_raw = record.get("ease", EASE_DEFAULT)
+        if isinstance(ease_raw, bool) or not isinstance(ease_raw, (int, float)):
+            raise MnemoError(
+                f"stored ease is {record.get('ease')!r}.",
+                "the SM-2 ease factor is a finite number at or above its floor.",
+                "restore the deck's .bak, or edit the file so ease is a number >= 1.3.",
+            )
         try:
-            ease = float(record.get("ease", EASE_DEFAULT))
+            ease = float(ease_raw)
         except (TypeError, ValueError) as exc:
             raise MnemoError(
                 f"stored ease is {record.get('ease')!r}.",

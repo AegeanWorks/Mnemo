@@ -77,6 +77,12 @@ def run_session(deck: Deck, today: str, limit: int,
                 write_line: Callable[[str], None],
                 deck_name: Optional[str] = None) -> SessionReport:
     """Run one bounded session over the due cards; q and end-of-input quit gracefully."""
+    if isinstance(limit, bool) or not isinstance(limit, int) or limit < 1:
+        raise MnemoError(
+            f"--limit is {limit}.",
+            "a session reviews at least one card, so the limit is a positive integer.",
+            "pass --limit 20, or drop the flag to use the default.",
+        )
     queue = deck.due_cards(today, deck_name)[:limit]
     if not queue:
         _announce_empty(deck, write_line, deck_name)

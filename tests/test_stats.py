@@ -57,6 +57,12 @@ class SummarizeTests(unittest.TestCase):
         self.assertEqual(stats.due_today, 0)
         self.assertEqual([count for _day, count in stats.forecast], [0] * 7)
 
+    def test_overdue_counts_toward_due_today_but_no_forecast_day(self):
+        cards = [make_card(1, due="2026-10-19")]
+        stats = summarize(cards, [], "2026-10-21")
+        self.assertEqual(stats.due_today, 1)
+        self.assertEqual([count for _day, count in stats.forecast], [0] * 7)
+
 
 if __name__ == "__main__":
     unittest.main()
